@@ -36,6 +36,7 @@ def plot_streamflow(dates, flows, sites):
   plt.title("Provo River Streamflow Data (2021)")
   plt.legend(title="Site Numbers")
   plt.grid(True)
+  plt.savefig("provo_streamflow.png", dpi=150, bbox_inches="tight")
   plt.show()
 
 
