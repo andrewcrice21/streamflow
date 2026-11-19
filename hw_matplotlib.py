@@ -67,3 +67,11 @@ def summarize(dates, flows, sites):
       out_file.write(f"{site},{max_flow:.1f},{max_date},{min_flow:.1f},{avg_flow:.1f}\n")
 
 summarize(dates, flows, sites)
+
+# Prompt user for a flow threshold in cfs and convert string input to float
+threshold = float(input("Enter a flow threshold (cfs): "))
+
+# Each reading is 15 minutes apart (0.25 hours), so count True values and multiply by 0.25
+for i, site in enumerate(sites):
+  hours_above = np.sum(flows[:, i] > threshold) * 0.25
+  print(f"Gauge {site}: {hours_above:.2f} hours above {threshold} cfs")
