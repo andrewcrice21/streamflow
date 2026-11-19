@@ -44,3 +44,26 @@ def plot_streamflow(dates, flows, sites):
 sites = ["10163000", "10155200", "10155500", "10154200", "10155000"]
 dates, flows = load_streamflow("June-2021-Provo-River-Streamflow-Rates (1).csv")
 plot_streamflow(dates, flows, sites)
+
+def summarize(dates, flows, sites):
+  # Excel check for gauge 10163000: MAX = [paste Excel MAX], AVERAGE = [paste Excel AVERAGE]
+  """Print and save summary statistics (max, date of max, min, average flow) for each gauge."""
+  # Print column headers for terminal output
+  print(f"{'Gauge':<10} {'Max (cfs)':>10} {'Date of max':<19} {'Min (cfs)':>10} {'Avg (cfs)':>10}")
+
+  # Write summary data to streamflow_summary.csv
+  with open("streamflow_summary.csv", "w") as out_file:
+    out_file.write("Gauge,Max (cfs),Date of max,Min (cfs),Avg (cfs)\n")
+
+    for i, site in enumerate(sites):
+      gauge_flows = flows[:, i]
+      max_flow = np.max(gauge_flows)
+      # Find the row index of the max flow and look up its corresponding date
+      max_date = dates[np.argmax(gauge_flows)]
+      min_flow = np.min(gauge_flows)
+      avg_flow = np.mean(gauge_flows)
+
+      print(f"{site:<10} {max_flow:10.1f} {str(max_date):<19} {min_flow:10.1f} {avg_flow:10.1f}")
+      out_file.write(f"{site},{max_flow:.1f},{max_date},{min_flow:.1f},{avg_flow:.1f}\n")
+
+summarize(dates, flows, sites)
